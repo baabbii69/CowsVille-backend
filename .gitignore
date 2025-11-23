@@ -1,0 +1,47 @@
+# Virtual environments
+myenv
+.venv
+venv/
+env/
+
+# Environment variables
+.env
+
+# Database
+db.sqlite3
+*.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Django
+*.log
+local_settings.py
+
+# Static and media files (generated, can be recreated)
+# Uncomment these if you want to exclude them from git
+# /staticfiles/
+# /media/
+# /static/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Old files
+oldmodels.py
+
+# Deployment
+*.zip
+*.tar.gz

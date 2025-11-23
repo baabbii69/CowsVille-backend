@@ -1,0 +1,24 @@
+# Media Files Configuration
+# Configuration for user-uploaded media files
+
+# Enable compression for media files
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# Set cache control for media files (shorter cache than static files)
+<IfModule mod_headers.c>
+    <FilesMatch "\.(jpg|jpeg|png|gif|svg|pdf)$">
+        Header set Cache-Control "max-age=86400, public"
+    </FilesMatch>
+</IfModule>
+
+# Set default charset
+AddDefaultCharset UTF-8
+
+# Prevent execution of scripts in media directory
+<FilesMatch "\.(php|py|pl|sh|cgi)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+

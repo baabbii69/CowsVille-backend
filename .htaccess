@@ -1,0 +1,59 @@
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+PassengerAppRoot "/home/cowsvijp/apiv3"
+PassengerBaseURI "/"
+PassengerPython "/home/cowsvijp/virtualenv/apiv3/3.11/bin/python"
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
+# # Passenger Django
+# PassengerEnabled On
+
+# # Let Passenger serve the app
+# PassengerAppRoot /home/cowsvijp/apiv3
+# PassengerPython /home/cowsvijp/virtualenv/apiv3/3.11/bin/python3.11
+# PassengerAppLogFile /home/cowsvijp/apiv3/stderr.log
+
+# # Static files (WORKS on cPanel)
+# RewriteEngine On
+
+# # Serve /static/ directly
+RewriteRule ^static/(.*)$ /home/cowsvijp/apiv3/staticfiles/$1 [L]
+
+# # Security rules
+# <FilesMatch "^(\.env|\.git|db\.sqlite3|requirements\.txt|manage\.py)$">
+#     Require all denied
+# </FilesMatch>
+
+# <FilesMatch "\.(py|pyc)$">
+#     Require all denied
+# </FilesMatch>
+PassengerBaseURI /
+PassengerPython /home/cowsvijp/virtualenv/apiv3/3.11/bin/python
+PassengerAppRoot /home/cowsvijp/apiv3
+PassengerStartupFile passenger_wsgi.py
+PassengerAppType wsgi
+PassengerLogFile /home/cowsvijp/apiv3/passenger.log
+
+RewriteEngine On
+
+# STATIC
+Alias /static /home/cowsvijp/apiv3/staticfiles
+<Directory "/home/cowsvijp/apiv3/staticfiles">
+    Require all granted
+</Directory>
+
+# MEDIA (optional — if you have media)
+Alias /media /home/cowsvijp/apiv3/media
+<Directory "/home/cowsvijp/apiv3/media">
+    Require all granted
+</Directory>
+
+# Let Passenger handle everything else
+
+# -----------------------------
+# Passenger autorestart settings
+# -----------------------------
+PassengerAppEnv production
+PassengerStartTimeout 10
+PassengerMinInstances 1
+PassengerMaxRequests 500
+PassengerSpawnMethod smart
+PassengerRestartDir tmp
