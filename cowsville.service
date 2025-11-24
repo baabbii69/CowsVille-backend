@@ -3,7 +3,7 @@ Description=Cowsville Django Application
 After=network.target postgresql.service
 
 [Service]
-Type=notify
+Type=simple
 # User and group
 User=root
 Group=root
