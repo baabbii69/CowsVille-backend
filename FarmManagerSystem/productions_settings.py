@@ -10,7 +10,7 @@ load_dotenv()
 DEBUG = False
 ALLOWED_HOSTS = os.getenv(
     "ALLOWED_HOSTS",
-    "cowsville-aau-cvma.com,api.cowsville-aau-cvma.com,www.cowsville-aau-cvma.com,apiv3.cowsville-aau-cvma.com,*",
+    "localhost,127.0.0.1",
 ).split(",")
 
 # Security settings for production
@@ -28,10 +28,10 @@ X_FRAME_OPTIONS = "DENY"
 # Support both old (DATABASE_*) and new (DB_*) variable names for compatibility
 
 # Get database credentials - support both naming conventions
-db_name = os.getenv("DB_NAME") or os.getenv("DATABASE_NAME", "cowsvijp_cowsville1")
-db_user = os.getenv("DB_USER") or os.getenv("DATABASE_USER", "cowsvijp_admin1")
+db_name = os.getenv("DB_NAME") or os.getenv("DATABASE_NAME", "farmmanager")
+db_user = os.getenv("DB_USER") or os.getenv("DATABASE_USER", "farmuser")
 db_password = os.getenv("DB_PASSWORD") or os.getenv(
-    "DATABASE_PASSWORD", "SecurePass123"
+    "DATABASE_PASSWORD", "CHANGE_ME_IN_PRODUCTION"
 )
 db_host = os.getenv("DB_HOST", "localhost")
 db_port = os.getenv("DB_PORT", "5432")
@@ -60,15 +60,14 @@ MEDIA_ROOT = BASE_DIR / "media"
 # CORS settings for your frontend
 CORS_ALLOWED_ORIGINS = os.getenv(
     "CORS_ALLOWED_ORIGINS",
-    "https://cowsville-aau-cvma.com,https://www.cowsville-aau-cvma.com,*,http://localhost:8000,http://localhost:3000,",
+    "http://localhost:3000,http://localhost:8000",
 ).split(",")
 
 CORS_ALLOW_ALL_ORIGINS = True  # Disable in production
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://cowsville-aau-cvma.com",
-    "https://www.cowsville-aau-cvma.com",
     "http://localhost:3000",
+    "http://localhost:8000",
 ]
 
 # Logging configuration for production
