@@ -7,32 +7,40 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('FarmManager', '0005_alter_reproduction_heat_signs_seen'),
+        ("FarmManager", "0005_alter_reproduction_heat_signs_seen"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='reproduction',
-            options={'ordering': ['-heat_sign_recorded_at']},
+            name="reproduction",
+            options={"ordering": ["-heat_sign_recorded_at"]},
         ),
         migrations.AddField(
-            model_name='reproduction',
-            name='heat_sign_recorded_at',
+            model_name="reproduction",
+            name="heat_sign_recorded_at",
             field=models.DateTimeField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='reproduction',
-            name='cow',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='reproductions', to='FarmManager.cow'),
+            model_name="reproduction",
+            name="cow",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="reproductions",
+                to="FarmManager.cow",
+            ),
         ),
         migrations.AlterField(
-            model_name='reproduction',
-            name='farm',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='reproductions', to='FarmManager.farm'),
+            model_name="reproduction",
+            name="farm",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="reproductions",
+                to="FarmManager.farm",
+            ),
         ),
         migrations.AlterField(
-            model_name='reproduction',
-            name='heat_signs_seen',
+            model_name="reproduction",
+            name="heat_signs_seen",
             field=models.TextField(blank=True, null=True),
         ),
     ]

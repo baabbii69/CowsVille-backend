@@ -1,24 +1,11 @@
 from django.contrib import admin
-from .models import (
-    Farm,
-    Cow,
-    Doctor,
-    Inseminator,
-    Message,
-    BreedType,
-    HousingType,
-    FloorType,
-    FeedingFrequency,
-    WaterSource,
-    GynecologicalStatus,
-    UdderHealthStatus,
-    MastitisStatus,
-    GeneralHealthStatus,
-    MedicalAssessment,
-    InseminationRecord,
-    FarmerMedicalReport,
-    Reproduction,
-)
+
+from .models import (BreedType, Cow, Doctor, Farm, FarmerMedicalReport,
+                     FeedingFrequency, FloorType, GeneralHealthStatus,
+                     GynecologicalStatus, HousingType, InseminationRecord,
+                     Inseminator, MastitisStatus, MedicalAssessment, Message,
+                     Reproduction, UdderHealthStatus, WaterSource)
+
 # from unfold.admin import ModelAdmin
 
 
@@ -33,11 +20,17 @@ class FarmAdmin(admin.ModelAdmin):
     )
     search_fields = ("farm_id", "owner_name", "address")
     list_filter = ("type_of_housing", "type_of_floor", "source_of_water")
-    
+
     # Optimize queries to prevent N+1 problem
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.select_related('doctor', 'inseminator', 'type_of_housing', 'type_of_floor', 'source_of_water')
+        return qs.select_related(
+            "doctor",
+            "inseminator",
+            "type_of_housing",
+            "type_of_floor",
+            "source_of_water",
+        )
 
 
 @admin.register(Cow)
@@ -45,11 +38,11 @@ class CowAdmin(admin.ModelAdmin):
     list_display = ("cow_id", "farm", "breed", "date_of_birth", "sex")
     search_fields = ("cow_id", "farm__farm_id")
     list_filter = ("breed", "sex", "gynecological_status")
-    
+
     # Optimize queries to prevent N+1 problem
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.select_related('farm', 'breed', 'gynecological_status')
+        return qs.select_related("farm", "breed", "gynecological_status")
 
 
 @admin.register(Doctor)
@@ -71,11 +64,11 @@ class MessageAdmin(admin.ModelAdmin):
     list_display = ("farm", "cow", "message_type", "sent_date", "is_sent")
     search_fields = ("farm__farm_id", "cow__cow_id", "message_text")
     list_filter = ("message_type", "is_sent", "sent_date")
-    
+
     # Optimize queries to prevent N+1 problem
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.select_related('farm', 'cow')
+        return qs.select_related("farm", "cow")
 
 
 @admin.register(MedicalAssessment)
@@ -84,11 +77,13 @@ class MedicalAssessmentAdmin(admin.ModelAdmin):
     search_fields = ("farm__farm_id", "cow__cow_id", "assessed_by__name")
     list_filter = ("is_cow_sick", "sickness_type", "is_cow_vaccinated", "has_deworming")
     date_hierarchy = "assessment_date"
-    
+
     # Optimize queries to prevent N+1 problem
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.select_related('farm', 'cow', 'assessed_by', 'general_health', 'udder_health', 'mastitis')
+        return qs.select_related(
+            "farm", "cow", "assessed_by", "general_health", "udder_health", "mastitis"
+        )
 
 
 @admin.register(InseminationRecord)
@@ -97,11 +92,11 @@ class InseminationRecordAdmin(admin.ModelAdmin):
     search_fields = ("farm__farm_id", "cow__cow_id", "inseminator__name")
     list_filter = ("is_inseminated",)
     date_hierarchy = "recorded_date"
-    
+
     # Optimize queries to prevent N+1 problem
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.select_related('farm', 'cow', 'inseminator')
+        return qs.select_related("farm", "cow", "inseminator")
 
 
 @admin.register(FarmerMedicalReport)
@@ -110,23 +105,30 @@ class FarmerMedicalReportAdmin(admin.ModelAdmin):
     search_fields = ("farm__farm_id", "cow__cow_id", "sickness_description")
     list_filter = ("is_reviewed",)
     date_hierarchy = "reported_date"
-    
+
     # Optimize queries to prevent N+1 problem
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.select_related('farm', 'cow', 'reviewed_by')
+        return qs.select_related("farm", "cow", "reviewed_by")
 
 
 @admin.register(Reproduction)
 class ReproductionAdmin(admin.ModelAdmin):
-    list_display = ("cow", "farm", "is_cow_pregnant", "pregnancy_date", "calving_date", "heat_sign_recorded_at")
+    list_display = (
+        "cow",
+        "farm",
+        "is_cow_pregnant",
+        "pregnancy_date",
+        "calving_date",
+        "heat_sign_recorded_at",
+    )
     search_fields = ("cow__cow_id", "farm__farm_id")
     list_filter = ("is_cow_pregnant", "calving_date")
-    
+
     # Optimize queries to prevent N+1 problem
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        return qs.select_related('farm', 'cow')
+        return qs.select_related("farm", "cow")
 
 
 # Register choice models

@@ -1,26 +1,16 @@
 from django.contrib import admin
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
-from .views import (
-    FarmViewSet,
-    CowViewSet,
-    ReproductionViewSet,
-    InseminatorViewSet,
-    MessageViewSet,
-    BreedTypeViewSet,
-    HousingTypeViewSet,
-    FloorTypeViewSet,
-    FeedingFrequencyViewSet,
-    WaterSourceViewSet,
-    DoctorViewSet,
-    GynecologicalStatusViewSet,
-    UdderHealthStatusViewSet,
-    MastitisStatusViewSet,
-    GeneralHealthStatusViewSet,
-    FarmerMedicalReportViewSet,
-    MedicalAssessmentViewSet,
-    InseminationRecordViewSet,
-)
+
+from .views import (BreedTypeViewSet, CowViewSet, DoctorViewSet,
+                    FarmerMedicalReportViewSet, FarmViewSet,
+                    FeedingFrequencyViewSet, FloorTypeViewSet,
+                    GeneralHealthStatusViewSet, GynecologicalStatusViewSet,
+                    HousingTypeViewSet, InseminationRecordViewSet,
+                    InseminatorViewSet, MastitisStatusViewSet,
+                    MedicalAssessmentViewSet, MessageViewSet,
+                    ReproductionViewSet, UdderHealthStatusViewSet,
+                    WaterSourceViewSet)
 
 router = DefaultRouter()
 

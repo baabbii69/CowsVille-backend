@@ -1,7 +1,11 @@
 from django.core.management.base import BaseCommand
-from FarmManager.models import Farm, Cow
+
+from FarmManager.models import Cow, Farm
+
+
 class Command(BaseCommand):
-    help = 'Recalculates total cow counts for all farms'
+    help = "Recalculates total cow counts for all farms"
+
     def handle(self, *args, **kwargs):
         for farm in Farm.objects.all():
             count = Cow.objects.filter(farm=farm, is_deleted=False).count()

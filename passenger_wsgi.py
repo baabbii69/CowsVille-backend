@@ -3,8 +3,8 @@ Passenger WSGI configuration for cPanel deployment.
 Enhanced with health-check restart support.
 """
 
-import sys
 import os
+import sys
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -14,12 +14,15 @@ if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))
 
 # Django settings
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'FarmManagerSystem.productions_settings')
+os.environ.setdefault(
+    "DJANGO_SETTINGS_MODULE", "FarmManagerSystem.productions_settings"
+)
 
 # Load .env
 try:
     from dotenv import load_dotenv
-    env_file = BASE_DIR / '.env'
+
+    env_file = BASE_DIR / ".env"
     if env_file.exists():
         load_dotenv(dotenv_path=env_file)
     else:
@@ -41,15 +44,18 @@ if health_file.exists():
 # Start WSGI
 try:
     from django.core.wsgi import get_wsgi_application
+
     application = get_wsgi_application()
 except Exception as e:
     import traceback
-    error_msg = f"Error loading Django app: {e}\n{traceback.format_exc()}"
-    def error_application(environ, start_response):
-        start_response('500 Internal Server Error', [('Content-Type', 'text/plain')])
-        return [error_msg.encode()]
-    application = error_application
 
+    error_msg = f"Error loading Django app: {e}\n{traceback.format_exc()}"
+
+    def error_application(environ, start_response):
+        start_response("500 Internal Server Error", [("Content-Type", "text/plain")])
+        return [error_msg.encode()]
+
+    application = error_application
 
 
 # """
@@ -104,12 +110,12 @@ except Exception as e:
 #     import traceback
 #     error_msg = f"Error loading Django application: {e}\n{traceback.format_exc()}"
 #     print(error_msg, file=sys.stderr)
-    
+
 #     # Create a simple error application that shows the error
 #     def error_application(environ, start_response):
 #         status = '500 Internal Server Error'
 #         headers = [('Content-Type', 'text/plain')]
 #         start_response(status, headers)
 #         return [error_msg.encode('utf-8')]
-    
+
 #     application = error_application

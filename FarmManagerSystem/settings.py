@@ -10,12 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
-from pathlib import Path
 import os
-from dotenv import load_dotenv
+from pathlib import Path
+
 from django.templatetags.static import static
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
+from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
@@ -28,26 +29,27 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', "django-insecure-^nvczssod(!rcglw2)dhy)looo$0$ssiydr4_ok&1_82esqt7+")
+SECRET_KEY = os.getenv(
+    "DJANGO_SECRET_KEY",
+    "django-insecure-^nvczssod(!rcglw2)dhy)looo$0$ssiydr4_ok&1_82esqt7+",
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
+DEBUG = os.getenv("DEBUG", "True").lower() == "true"
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split(",")
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    # "unfold",
-    # "unfold.contrib.filters",  # optional, if special filters are needed
-    # "unfold.contrib.forms",  # optional, if special form elements are needed
-    # "unfold.contrib.inlines",  # optional, if special inlines are needed
-    # "unfold.contrib.import_export",  # optional, if django-import-export package is used
-    # "unfold.contrib.guardian",  # optional, if django-guardian package is used
-    # "unfold.contrib.simple_history",  # optional, if django-simple-history package is used
-    # "unfold.contrib.location_field",  # optional, if django-location-field package is used
-    # "unfold.contrib.constance",
+    # "unfold",  # Unfold admin - disabled due to compatibility issues
+    # "unfold.contrib.filters",
+    # "unfold.contrib.forms",
+    # "unfold.contrib.inlines",
+    # "unfold.contrib.import_export",
+    # "unfold.contrib.guardian",
+    # "unfold.contrib.simple_history",
     "django.contrib.admin",
     "FarmManager",
     "django.contrib.auth",
@@ -73,7 +75,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    # "unfold.middleware.UnfoldMiddleware",
 ]
 
 # Request timeout settings
@@ -122,58 +123,26 @@ WSGI_APPLICATION = "FarmManagerSystem.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-# MySQL configuration - supports both old (DATABASE_*) and new (DB_*) variable names
 
-# Get database credentials - support both naming conventions
-db_engine = os.getenv('DB_ENGINE', 'mysql').lower()
-db_name = os.getenv('DB_NAME') or os.getenv('DATABASE_NAME', 'cowsvijp_cowsville')
-db_user = os.getenv('DB_USER') or os.getenv('DATABASE_USER', 'cowsvijp_admin')
-db_password = os.getenv('DB_PASSWORD') or os.getenv('DATABASE_PASSWORD', 'SecurePass123')
-db_host = os.getenv('DB_HOST', 'localhost')
-db_port = os.getenv('DB_PORT', '3306')
-
-if db_engine == 'mysql':
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.mysql",
-            "NAME": db_name,
-            "USER": db_user,
-            "PASSWORD": db_password,
-            "HOST": db_host,
-            "PORT": db_port,
-            "CONN_MAX_AGE": 0,  # Connection pooling
-            "OPTIONS": {
-                "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
-                "charset": "utf8mb4",
-            }
-        }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("DB_NAME"),
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST", "localhost"),
+        "PORT": os.getenv("DB_PORT", "5432"),
+        "CONN_MAX_AGE": 60,
     }
-else:
-    # Fallback to PostgreSQL if needed
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": db_name,
-            "USER": db_user,
-            "PASSWORD": db_password,
-            "HOST": db_host,
-            "PORT": db_port,
-            "CONN_MAX_AGE": 0,
-            "OPTIONS": {
-                "connect_timeout": 10,
-            }
-        }
-    }
+}
 
 # Caching Configuration
 CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'farmmanager-cache',
-        'TIMEOUT': 300,  # 5 minutes default timeout
-        'OPTIONS': {
-            'MAX_ENTRIES': 1000
-        }
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "farmmanager-cache",
+        "TIMEOUT": 300,  # 5 minutes default timeout
+        "OPTIONS": {"MAX_ENTRIES": 1000},
     }
 }
 
@@ -213,12 +182,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = "/static/"
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_ROOT = '/home/cowsvijp/apiv3/staticfiles'
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Media files (user uploads)
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / "media"
 
 # Comment out non-existent static directory
 # STATICFILES_DIRS = [
@@ -281,130 +249,88 @@ LOGGING = {
 
 # Django REST Framework settings
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.BasicAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
     ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
     ],
     # Pagination settings - prevents returning all records at once
-    'DEFAULT_PAGINATION_CLASS': 'FarmManager.pagination.StandardResultsSetPagination',
-    'PAGE_SIZE': 50,  # Default page size (can be overridden via ?page_size=)
+    "DEFAULT_PAGINATION_CLASS": "FarmManager.pagination.StandardResultsSetPagination",
+    "PAGE_SIZE": 50,  # Default page size (can be overridden via ?page_size=)
     # Filtering backends
-    'DEFAULT_FILTER_BACKENDS': [
-        'django_filters.rest_framework.DjangoFilterBackend',
-        'rest_framework.filters.SearchFilter',
-        'rest_framework.filters.OrderingFilter',
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.SearchFilter",
+        "rest_framework.filters.OrderingFilter",
     ],
     # Throttling to prevent abuse
-    'DEFAULT_THROTTLE_CLASSES': [
-        'rest_framework.throttling.AnonRateThrottle',
-        'rest_framework.throttling.UserRateThrottle'
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.UserRateThrottle",
     ],
-    'DEFAULT_THROTTLE_RATES': {
-        'anon': '100/hour',  # Anonymous users: 100 requests per hour
-        'user': '1000/hour'  # Authenticated users: 1000 requests per hour
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": "100/hour",  # Anonymous users: 100 requests per hour
+        "user": "1000/hour",  # Authenticated users: 1000 requests per hour
     },
     # Renderer settings
-    'DEFAULT_RENDERER_CLASSES': [
-        'rest_framework.renderers.JSONRenderer',
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
     ],
 }
 
 
 # UNFOLD = {
-#     "SITE_TITLE": "Cowsville Admin",
-#     "SITE_HEADER": "Cowsville Management",
-#     "SITE_URL": "/admin/",
-#     "SITE_ICON": {
-#         "light": "/static/icons/cowsville-logo.svg",
-#         "dark": "/static/icons/cowsville-logo.svg",
-#     },
-
-#     # "THEME": "light",
-#     "COLLAPSIBLE_SIDEBAR": True,
-#     "COLORS": {
-#         "primary": {
-#             50:  "#e6f0ff",
-#             100: "#bad3ff",
-#             200: "#89b9ff",
-#             300: "#589eff",
-#             400: "#2d84ff",
-#             500: "#006aff",
-#             600: "#0053cc",
-#             700: "#003d99",
-#             800: "#002666",
-#             900: "#001033"
-#         }
-#     },
-
-# #   "BORDER_RADIUS": "6px",
-# #     "COLORS": {
-# #         "base": {
-# #             "50": "oklch(98.5% .002 247.839)",
-# #             "100": "oklch(96.7% .003 264.542)",
-# #             "200": "oklch(92.8% .006 264.531)",
-# #             "300": "oklch(87.2% .01 258.338)",
-# #             "400": "oklch(70.7% .022 261.325)",
-# #             "500": "oklch(55.1% .027 264.364)",
-# #             "600": "oklch(44.6% .03 256.802)",
-# #             "700": "oklch(37.3% .034 259.733)",
-# #             "800": "oklch(27.8% .033 256.848)",
-# #             "900": "oklch(21% .034 264.665)",
-# #             "950": "oklch(13% .028 261.692)",
-# #         },
-# #         "primary": {
-# #             "50": "oklch(97.7% .014 308.299)",
-# #             "100": "oklch(94.6% .033 307.174)",
-# #             "200": "oklch(90.2% .063 306.703)",
-# #             "300": "oklch(82.7% .119 306.383)",
-# #             "400": "oklch(71.4% .203 305.504)",
-# #             "500": "oklch(62.7% .265 303.9)",
-# #             "600": "oklch(55.8% .288 302.321)",
-# #             "700": "oklch(49.6% .265 301.924)",
-# #             "800": "oklch(43.8% .218 303.724)",
-# #             "900": "oklch(38.1% .176 304.987)",
-# #             "950": "oklch(29.1% .149 302.717)",
-# #         },
-# #         "font": {
-# #             "subtle-light": "var(--color-base-500)",  # text-base-500
-# #             "subtle-dark": "var(--color-base-400)",  # text-base-400
-# #             "default-light": "var(--color-base-600)",  # text-base-600
-# #             "default-dark": "var(--color-base-300)",  # text-base-300
-# #             "important-light": "var(--color-base-900)",  # text-base-900
-# #             "important-dark": "var(--color-base-100)",  # text-base-100
-# #         },
-# #     },
-
-#     "SIDEBAR": {
-#         "show_search": True,
-#         "show_all_models": False,
-#         "show_app_icons": True,
-#         "icons": {},
-#     },
-
-#     # "FORMS": {
-#     #     "rounded_fields": True,
-#     #     "compact": True,
-#     #     "floated_labels": True,
-#     # },
-
-#     # "LIST": {
-#     #     "compact": True,
-#     #     "rounded_cells": True,
-#     #     "hover": True,
-#     # },
-    
-
-#     "LOGIN": {
-#         "language_selector": False,
-#         "logo": {
-#             "light": "/static/icons/cowsville-logo.svg",
-#             "dark": "/static/icons/cowsville-logo.svg",
-#         },
-#         "image": lambda request: "/static/icons/cowsville-logo.svg",
-#         "subtitle": "Farm & Vet Management Login",
+#     "site_title": "Cowsville Management",
+#     "site_header": "Cowsville Admin",
+#     "site_logo": "icons/logo.svg",
+#     "show_history": True,
+#     "collapsible_menu": True,
+#     "colors": {
+#         "primary": "#134B73",
 #     },
 # }
+UNFOLD = {
+    "SITE_TITLE": "Cowsville Admin",
+    "SITE_HEADER": "Cowsville Management",
+    "SITE_URL": "/admin/",
+    "SITE_ICON": {
+        "light": "/static/icons/cowsville-logo.svg",
+        "dark": "/static/icons/cowsville-logo.svg",
+    },
 
+    # "THEME": "light",
+    "COLLAPSIBLE_SIDEBAR": True,
+    "COLORS": {
+        "primary": {
+            50:  "#e6f0ff",
+            100: "#bad3ff",
+            200: "#89b9ff",
+            300: "#589eff",
+            400: "#2d84ff",
+            500: "#006aff",
+            600: "#0053cc",
+            700: "#003d99",
+            800: "#002666",
+            900: "#001033"
+        }
+    },
+
+    "SIDEBAR": {
+        "show_search": True,
+        "show_all_models": False,
+        "show_app_icons": True,
+        "icons": {},
+    },
+
+    "LOGIN": {
+        "language_selector": False,
+        "logo": {
+            "light": "/static/icons/cowsville-logo.svg",
+            "dark": "/static/icons/cowsville-logo.svg",
+        },
+        "image": lambda request: "/static/icons/cowsville-logo.svg",
+        "subtitle": "Farm & Vet Management Login",
+    },
+}

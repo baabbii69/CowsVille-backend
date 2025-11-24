@@ -1,12 +1,13 @@
 from django.core.management.base import BaseCommand
-from FarmManager.models import (
-    HousingType, FloorType, WaterSource, FeedingFrequency,
-    BreedType, GynecologicalStatus, UdderHealthStatus,
-    MastitisStatus, GeneralHealthStatus
-)
+
+from FarmManager.models import (BreedType, FeedingFrequency, FloorType,
+                                GeneralHealthStatus, GynecologicalStatus,
+                                HousingType, MastitisStatus, UdderHealthStatus,
+                                WaterSource)
+
 
 class Command(BaseCommand):
-    help = 'Populate choice models with initial data'
+    help = "Populate choice models with initial data"
 
     def handle(self, *args, **kwargs):
         # Housing Types
@@ -17,7 +18,7 @@ class Command(BaseCommand):
         ]
         for name, display_name in housing_types:
             HousingType.objects.get_or_create(name=name, display_name=display_name)
-        self.stdout.write(self.style.SUCCESS('Successfully created housing types'))
+        self.stdout.write(self.style.SUCCESS("Successfully created housing types"))
 
         # Floor Types
         floor_types = [
@@ -28,7 +29,7 @@ class Command(BaseCommand):
         ]
         for name, display_name in floor_types:
             FloorType.objects.get_or_create(name=name, display_name=display_name)
-        self.stdout.write(self.style.SUCCESS('Successfully created floor types'))
+        self.stdout.write(self.style.SUCCESS("Successfully created floor types"))
 
         # Water Sources
         water_sources = [
@@ -37,7 +38,7 @@ class Command(BaseCommand):
         ]
         for name, display_name in water_sources:
             WaterSource.objects.get_or_create(name=name, display_name=display_name)
-        self.stdout.write(self.style.SUCCESS('Successfully created water sources'))
+        self.stdout.write(self.style.SUCCESS("Successfully created water sources"))
 
         # Feeding Frequencies
         feeding_frequencies = [
@@ -47,7 +48,9 @@ class Command(BaseCommand):
         ]
         for name, display_name in feeding_frequencies:
             FeedingFrequency.objects.get_or_create(name=name, display_name=display_name)
-        self.stdout.write(self.style.SUCCESS('Successfully created feeding frequencies'))
+        self.stdout.write(
+            self.style.SUCCESS("Successfully created feeding frequencies")
+        )
 
         # Breed Types
         breed_types = [
@@ -58,7 +61,7 @@ class Command(BaseCommand):
         ]
         for name, display_name in breed_types:
             BreedType.objects.get_or_create(name=name, display_name=display_name)
-        self.stdout.write(self.style.SUCCESS('Successfully created breed types'))
+        self.stdout.write(self.style.SUCCESS("Successfully created breed types"))
 
         # Gynecological Status
         gynecological_statuses = [
@@ -70,8 +73,12 @@ class Command(BaseCommand):
             ("birth", "Birth"),
         ]
         for name, display_name in gynecological_statuses:
-            GynecologicalStatus.objects.get_or_create(name=name, display_name=display_name)
-        self.stdout.write(self.style.SUCCESS('Successfully created gynecological statuses'))
+            GynecologicalStatus.objects.get_or_create(
+                name=name, display_name=display_name
+            )
+        self.stdout.write(
+            self.style.SUCCESS("Successfully created gynecological statuses")
+        )
 
         # Udder Health Status
         udder_health_statuses = [
@@ -81,8 +88,12 @@ class Command(BaseCommand):
             ("1qt_normal", "1qt Normal"),
         ]
         for name, display_name in udder_health_statuses:
-            UdderHealthStatus.objects.get_or_create(name=name, display_name=display_name)
-        self.stdout.write(self.style.SUCCESS('Successfully created udder health statuses'))
+            UdderHealthStatus.objects.get_or_create(
+                name=name, display_name=display_name
+            )
+        self.stdout.write(
+            self.style.SUCCESS("Successfully created udder health statuses")
+        )
 
         # Mastitis Status
         mastitis_statuses = [
@@ -94,7 +105,7 @@ class Command(BaseCommand):
         ]
         for name, display_name in mastitis_statuses:
             MastitisStatus.objects.get_or_create(name=name, display_name=display_name)
-        self.stdout.write(self.style.SUCCESS('Successfully created mastitis statuses'))
+        self.stdout.write(self.style.SUCCESS("Successfully created mastitis statuses"))
 
         # General Health Status
         general_health_statuses = [
@@ -102,7 +113,13 @@ class Command(BaseCommand):
             ("sick", "Sick"),
         ]
         for name, display_name in general_health_statuses:
-            GeneralHealthStatus.objects.get_or_create(name=name, display_name=display_name)
-        self.stdout.write(self.style.SUCCESS('Successfully created general health statuses'))
+            GeneralHealthStatus.objects.get_or_create(
+                name=name, display_name=display_name
+            )
+        self.stdout.write(
+            self.style.SUCCESS("Successfully created general health statuses")
+        )
 
-        self.stdout.write(self.style.SUCCESS('All choice models have been populated successfully')) 
+        self.stdout.write(
+            self.style.SUCCESS("All choice models have been populated successfully")
+        )

@@ -1,32 +1,33 @@
-# Virtual environments
-myenv
-.venv
-venv/
-env/
-
 # Environment variables
 .env
-
-# Database
-db.sqlite3
-*.db
+.env.local
+.env.*.local
 
 # Python
+*.pyc
+*.pyo
+*.pyd
 __pycache__/
-*.py[cod]
-*$py.class
 *.so
+*.egg
+*.egg-info/
+dist/
+build/
 .Python
 
 # Django
+staticfiles/
+media/
+logs/
 *.log
-local_settings.py
+db.sqlite3
+db.sqlite3-journal
 
-# Static and media files (generated, can be recreated)
-# Uncomment these if you want to exclude them from git
-# /staticfiles/
-# /media/
-# /static/
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv
 
 # IDE
 .vscode/
@@ -34,14 +35,15 @@ local_settings.py
 *.swp
 *.swo
 *~
-
-# OS
 .DS_Store
-Thumbs.db
 
-# Old files
-oldmodels.py
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
 
-# Deployment
-*.zip
-*.tar.gz
+# Backup files
+*.bak
+*.backup
+*.sql

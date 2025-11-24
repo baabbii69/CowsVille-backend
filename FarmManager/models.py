@@ -1,5 +1,6 @@
+from django.core.validators import (MaxValueValidator, MinValueValidator,
+                                    RegexValidator)
 from django.db import models
-from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator
 from django.utils.translation import gettext_lazy as _
 
 
@@ -99,11 +100,11 @@ class Farm(SoftDeleteModel):
     )
     location_gps = models.CharField(max_length=255, blank=True, null=True)
     cluster_number = models.CharField(
-        max_length=50, 
-        blank=True, 
+        max_length=50,
+        blank=True,
         null=True,
         db_index=True,  # Add index for faster filtering
-        help_text=_("Cluster identifier for grouping farms")
+        help_text=_("Cluster identifier for grouping farms"),
     )
     fertility_camp_no = models.PositiveIntegerField(
         help_text=_("Number of fertility camps")
@@ -165,17 +166,22 @@ class Farm(SoftDeleteModel):
         blank=True,
         related_name="assigned_farms",
     )
-    
+
     def clean(self):
         from django.core.exceptions import ValidationError
+
         # Check for duplicates including soft-deleted records
         qs = Farm.objects.all_with_deleted().filter(farm_id=self.farm_id)
         if self.pk:
             qs = qs.exclude(pk=self.pk)
         if qs.exists():
-            raise ValidationError({
-                'farm_id': _(f"Farm with ID {self.farm_id} already exists (possibly in the recycle bin/deleted items).")
-            })
+            raise ValidationError(
+                {
+                    "farm_id": _(
+                        f"Farm with ID {self.farm_id} already exists (possibly in the recycle bin/deleted items)."
+                    )
+                }
+            )
         super().clean()
 
     def __str__(self):
@@ -234,16 +240,21 @@ class Cow(SoftDeleteModel):
 
     def clean(self):
         from django.core.exceptions import ValidationError
+
         # Check for duplicates including soft-deleted records
         qs = Cow.objects.all_with_deleted().filter(farm=self.farm, cow_id=self.cow_id)
         if self.pk:
             qs = qs.exclude(pk=self.pk)
         if qs.exists():
-            raise ValidationError({
-                'cow_id': _(f"Cow with ID {self.cow_id} already exists in this farm (possibly in the recycle bin/deleted items).")
-            })
+            raise ValidationError(
+                {
+                    "cow_id": _(
+                        f"Cow with ID {self.cow_id} already exists in this farm (possibly in the recycle bin/deleted items)."
+                    )
+                }
+            )
         super().clean()
-    
+
     def __str__(self):
         return f"Farm {self.farm.farm_id} - Cow {self.cow_id}"
 
@@ -256,9 +267,7 @@ class Reproduction(SoftDeleteModel):
     farm = models.ForeignKey(
         Farm, on_delete=models.CASCADE, related_name="reproductions"
     )
-    cow = models.ForeignKey(
-        Cow, on_delete=models.CASCADE, related_name="reproductions"
-    )
+    cow = models.ForeignKey(Cow, on_delete=models.CASCADE, related_name="reproductions")
 
     # Heat Detection
     heat_sign_start = models.DateTimeField(null=True, blank=True)
@@ -274,10 +283,14 @@ class Reproduction(SoftDeleteModel):
     heat_sign_recorded_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return f"Reproduction record for {self.cow.cow_id} at {self.heat_sign_recorded_at}"
+        return (
+            f"Reproduction record for {self.cow.cow_id} at {self.heat_sign_recorded_at}"
+        )
 
     class Meta:
-        ordering = ["-heat_sign_recorded_at"]  # Order by most recent heat sign records first
+        ordering = [
+            "-heat_sign_recorded_at"
+        ]  # Order by most recent heat sign records first
 
 
 class Message(SoftDeleteModel):
@@ -395,7 +408,9 @@ class MedicalAssessment(SoftDeleteModel):
     general_health = models.ForeignKey(GeneralHealthStatus, on_delete=models.PROTECT)
     udder_health = models.ForeignKey(UdderHealthStatus, on_delete=models.PROTECT)
     mastitis = models.ForeignKey(MastitisStatus, on_delete=models.PROTECT)
-    has_lameness = models.BooleanField(default=False, help_text=_("Whether the cow shows signs of lameness"))
+    has_lameness = models.BooleanField(
+        default=False, help_text=_("Whether the cow shows signs of lameness")
+    )
     body_condition_score = models.IntegerField()
     reproductive_health = models.TextField()
     metabolic_disease = models.TextField(blank=True)

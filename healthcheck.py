@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-import requests
 import pathlib
+
+import requests
 
 HEALTH_URL = "https://apiv3.cowsville-aau-cvma.com/health/"
 RESTART_FILE = pathlib.Path("/home/cowsvijp/apiv3/tmp/restart.txt")

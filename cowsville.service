@@ -1,0 +1,33 @@
+[Unit]
+Description=Cowsville Django Application
+After=network.target postgresql.service
+
+[Service]
+Type=notify
+# User and group
+User=root
+Group=root
+
+# Working directory
+WorkingDirectory=/root/CowsVille-backend
+
+# Environment
+Environment="PATH=/root/CowsVille-backend/venv/bin"
+EnvironmentFile=/root/CowsVille-backend/.env
+
+# Start command
+ExecStart=/root/CowsVille-backend/venv/bin/gunicorn \
+          --config /root/CowsVille-backend/gunicorn_config.py \
+          FarmManagerSystem.wsgi:application
+
+# Restart policy
+Restart=always
+RestartSec=10
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=cowsville
+
+[Install]
+WantedBy=multi-user.target

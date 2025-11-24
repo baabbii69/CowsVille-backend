@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('FarmManager', '0003_alter_breedtype_options_and_more'),
+        ("FarmManager", "0003_alter_breedtype_options_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='reproduction',
-            name='heat_sign_start',
+            model_name="reproduction",
+            name="heat_sign_start",
             field=models.DateTimeField(blank=True, null=True),
         ),
     ]

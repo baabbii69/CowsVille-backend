@@ -1,6 +1,7 @@
-import requests
 import logging
 import os
+
+import requests
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -13,7 +14,9 @@ SENDER_NAME = os.getenv("AFROMESSAGE_SENDER_NAME", "Cowsville")  # Optional send
 
 # Development mode - don't require API token
 if not API_TOKEN:
-    logging.warning("⚠️ Development mode: AFROMESSAGE_API_TOKEN not set. SMS sending is disabled.")
+    logging.warning(
+        "⚠️ Development mode: AFROMESSAGE_API_TOKEN not set. SMS sending is disabled."
+    )
     API_TOKEN = "development_token"
 
 # API Details
@@ -35,11 +38,17 @@ def send_alert(phone_number, message):
     # In development mode, just log the message instead of sending it
     if API_TOKEN == "development_token":
         logging.info(f"📱 [DEV MODE] Would send SMS to {phone_number}: {message}")
-        return {"status": "success", "response": {"acknowledge": "success", "message": "Development mode - no actual SMS sent"}}
+        return {
+            "status": "success",
+            "response": {
+                "acknowledge": "success",
+                "message": "Development mode - no actual SMS sent",
+            },
+        }
 
     try:
         # Construct the request URL with proper sender info
-        params = { # Sender name (e.g., "Cowsville")
+        params = {  # Sender name (e.g., "Cowsville")
             "sender": SENDER_ID,  # Short code/sender ID if you have one
             "to": phone_number,
             "message": message,
