@@ -65,10 +65,10 @@ CORS_ALLOWED_ORIGINS = os.getenv(
 
 CORS_ALLOW_ALL_ORIGINS = True  # Disable in production
 
-CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:3000",
-    "http://localhost:8000",
-]
+CSRF_TRUSTED_ORIGINS = os.getenv(
+    "CSRF_TRUSTED_ORIGINS",
+    "http://localhost:3000,http://localhost:8000",
+).split(",")
 
 # Logging configuration for production
 LOGGING = {
