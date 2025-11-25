@@ -187,6 +187,10 @@ class Farm(SoftDeleteModel):
     def __str__(self):
         return f"Farm {self.farm_id} - {self.owner_name}"
 
+    class Meta:
+        ordering = ["farm_id"]
+
+
 
 class Cow(SoftDeleteModel):
     class Gender(models.TextChoices):
