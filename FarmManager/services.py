@@ -377,7 +377,12 @@ class LoggingMixin:
     def log_validation_error(self, operation: str, errors):
         """Log validation errors"""
         logger = self.get_logger()
-        logger.warning(f"Invalid {operation} data: {errors}")
+        try:
+            logger.warning(f"Invalid {operation} data: {errors}")
+        except (ValueError, TypeError) as e:
+            # If errors can't be converted to string, log raw error
+            logger.error(f"Error logging validation errors for {operation}: {str(e)}")
+            logger.warning(f"Invalid {operation} data (could not serialize errors)")
 
 
 class ResponseService:
