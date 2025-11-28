@@ -625,11 +625,8 @@ class ReproductionSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class StaffAssignmentSerializer(serializers.ModelSerializer):
+class StaffAssignmentSerializer(serializers.Serializer):
     staff_id = serializers.IntegerField(required=True)
-
-    class Meta:
-        abstract = True
 
     def validate(self, attrs):
         return NotImplementedError("child classes must implement this method")
