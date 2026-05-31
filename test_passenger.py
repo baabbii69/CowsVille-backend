@@ -1,90 +1,90 @@
 """
-Test script to verify Passenger configuration
-Run this on the server to test if everything works
+Script to verify Passenger configuration.
+
+Run this directly on the server with:
+python test_passenger.py
 """
 
 import os
 import sys
 from pathlib import Path
 
-print("=" * 60)
-print("Passenger Configuration Test")
-print("=" * 60)
 
-BASE_DIR = Path(__file__).resolve().parent
-print(f"\n1. Base Directory: {BASE_DIR}")
+def main():
+    print("=" * 60)
+    print("Passenger Configuration Test")
+    print("=" * 60)
 
-# Check Python path
-print(f"\n2. Python Path:")
-for p in sys.path[:5]:
-    print(f"   - {p}")
+    base_dir = Path(__file__).resolve().parent
+    print(f"\n1. Base Directory: {base_dir}")
 
-# Check .env file
-env_file = BASE_DIR / ".env"
-print(f"\n3. .env file exists: {env_file.exists()}")
-if env_file.exists():
-    print(f"   Location: {env_file}")
+    print("\n2. Python Path:")
+    for path in sys.path[:5]:
+        print(f"   - {path}")
 
-# Check passenger_wsgi.py
-wsgi_file = BASE_DIR / "passenger_wsgi.py"
-print(f"\n4. passenger_wsgi.py exists: {wsgi_file.exists()}")
+    env_file = base_dir / ".env"
+    print(f"\n3. .env file exists: {env_file.exists()}")
+    if env_file.exists():
+        print(f"   Location: {env_file}")
 
-# Check manage.py
-manage_file = BASE_DIR / "manage.py"
-print(f"\n5. manage.py exists: {manage_file.exists()}")
+    wsgi_file = base_dir / "passenger_wsgi.py"
+    print(f"\n4. passenger_wsgi.py exists: {wsgi_file.exists()}")
 
-# Test Django import
-print(f"\n6. Testing Django import...")
-try:
-    import django
+    manage_file = base_dir / "manage.py"
+    print(f"\n5. manage.py exists: {manage_file.exists()}")
 
-    print(f"   ✅ Django {django.get_version()} imported")
-except Exception as e:
-    print(f"   ❌ Django import failed: {e}")
+    print("\n6. Testing Django import...")
+    try:
+        import django
 
-# Test settings import
-print(f"\n7. Testing settings import...")
-try:
-    os.environ.setdefault(
-        "DJANGO_SETTINGS_MODULE", "FarmManagerSystem.productions_settings"
-    )
-    from django.conf import settings
+        print(f"   OK: Django {django.get_version()} imported")
+    except Exception as exc:
+        print(f"   FAILED: Django import failed: {exc}")
 
-    print(f"   ✅ Settings imported")
-    print(f"   DEBUG: {settings.DEBUG}")
-    print(f"   ALLOWED_HOSTS: {settings.ALLOWED_HOSTS}")
-except Exception as e:
-    print(f"   ❌ Settings import failed: {e}")
-    import traceback
+    print("\n7. Testing settings import...")
+    try:
+        os.environ.setdefault(
+            "DJANGO_SETTINGS_MODULE", "FarmManagerSystem.productions_settings"
+        )
+        from django.conf import settings
 
-    traceback.print_exc()
+        print("   OK: Settings imported")
+        print(f"   DEBUG: {settings.DEBUG}")
+        print(f"   ALLOWED_HOSTS: {settings.ALLOWED_HOSTS}")
+    except Exception as exc:
+        print(f"   FAILED: Settings import failed: {exc}")
+        import traceback
 
-# Test WSGI import
-print(f"\n8. Testing WSGI import...")
-try:
-    from django.core.wsgi import get_wsgi_application
+        traceback.print_exc()
 
-    app = get_wsgi_application()
-    print(f"   ✅ WSGI application created")
-except Exception as e:
-    print(f"   ❌ WSGI import failed: {e}")
-    import traceback
+    print("\n8. Testing WSGI import...")
+    try:
+        from django.core.wsgi import get_wsgi_application
 
-    traceback.print_exc()
+        get_wsgi_application()
+        print("   OK: WSGI application created")
+    except Exception as exc:
+        print(f"   FAILED: WSGI import failed: {exc}")
+        import traceback
 
-# Test passenger_wsgi import
-print(f"\n9. Testing passenger_wsgi import...")
-try:
-    sys.path.insert(0, str(BASE_DIR))
-    from passenger_wsgi import application
+        traceback.print_exc()
 
-    print(f"   ✅ passenger_wsgi.application imported")
-except Exception as e:
-    print(f"   ❌ passenger_wsgi import failed: {e}")
-    import traceback
+    print("\n9. Testing passenger_wsgi import...")
+    try:
+        sys.path.insert(0, str(base_dir))
+        from passenger_wsgi import application  # noqa: F401
 
-    traceback.print_exc()
+        print("   OK: passenger_wsgi.application imported")
+    except Exception as exc:
+        print(f"   FAILED: passenger_wsgi import failed: {exc}")
+        import traceback
 
-print("\n" + "=" * 60)
-print("Test Complete")
-print("=" * 60)
+        traceback.print_exc()
+
+    print("\n" + "=" * 60)
+    print("Test Complete")
+    print("=" * 60)
+
+
+if __name__ == "__main__":
+    main()

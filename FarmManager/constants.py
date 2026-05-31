@@ -224,6 +224,20 @@ class MessageTemplates:
             f"እባክዎን ላሙን የኮርማ ምልክቶች ይከታተሉ"
         )
 
+    @staticmethod
+    def heat_monitoring_inseminator_reminder(
+        farm_id, owner_name, phone, cow_id, days_since_heat, last_heat_date
+    ):
+        return (
+            f"🔄 የኮርማ ፍላጎት ማስታወሻ\n"
+            f"እርባታ ጣቢያ፦ {farm_id} - {owner_name}\n"
+            f"ስልክ ቁ፦ {phone}\n"
+            f"ላም፦ {cow_id}\n"
+            f"ከመጨረሻው የኮርማ ምልክት ጀምሮ፡ {days_since_heat} ቀናት\n"
+            f"የመጨረሻው የኮርማ ቀን፡ {last_heat_date}\n"
+            f"እባክዎን ላሙን የኮርማ ምልክቶች ይከታተሉ"
+        )
+
 
 # API Response Messages
 class APIMessages:
